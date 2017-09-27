@@ -41,6 +41,7 @@ var names = ["Yaakov", "John", "Jen", "Jason", "Paul", "Frank", "Larry", "Paula"
 // using the 'speak' method or either helloSpeaker's or byeSpeaker's
 // 'speak' method.
 // See Lecture 50, part 1
+console.log('\n****** Printing assignment #1 array of names below ******\n\n');
 for (var i = 0; i < names.length; i++) {
     // STEP 11:
     // Retrieve the first letter of the current name in the loop.
@@ -64,7 +65,7 @@ for (var i = 0; i < names.length; i++) {
 }
 
 // Extra part 2b
-console.log('\n****** Printing extra assignment array of names below ******\n\n');
+console.log('\n****** Printing extra assignment #2 array of names below ******\n\n');
 var newNames = names.map(nameGreetings);
 
 function nameGreetings(name) {
@@ -77,4 +78,23 @@ function nameGreetings(name) {
 
 for (var i = 0; i < newNames.length; i++) {
     console.log(newNames[i]);
+}
+
+// Extra part 3
+console.log('\n****** Printing extra assignment #3 array of names below ******\n\n');
+var reducedNames = names.reduce(function(arr, name) {
+    if (name.charAt(0).toLowerCase() === 'j') {
+        arr.bye.push(byeSpeaker.speakSimple(name))
+    } else {
+        arr.hello.push(helloSpeaker.speakSimple(name))
+    }
+    return arr;
+}, {hello: [], bye: []});
+
+for (var i = 0; i < reducedNames.hello.length; i++) {
+    console.log(reducedNames.hello[i]);
+}
+
+for (var i = 0; i < reducedNames.bye.length; i++) {
+    console.log(reducedNames.bye[i]);
 }
