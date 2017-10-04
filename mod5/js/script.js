@@ -91,8 +91,7 @@ $(function () { // Same as document.addEventListener("DOMContentLoaded"...
     showLoading("#main-content");
     $ajaxUtils.sendGetRequest(
       allCategoriesUrl,
-      // [...], // ***** <---- TODO: STEP 1: Substitute [...] ******
-      buildAndShowHomeHTML,
+      buildAndShowHomeHTML,// ***** <---- TODO: STEP 1: Substitute [...] ******
       true); // Explicitely setting the flag to get JSON from server processed into an object literal
   });
   // *** finish **
@@ -137,10 +136,6 @@ $(function () { // Same as document.addEventListener("DOMContentLoaded"...
     return categories[randomArrayIndex];
   }
 
-  function plurilize(n, str) {
-    return n > 1 ? n + " " + str + "s" : n + " " + str;
-  }
-
   // Load the about view
   dc.loadAbout = function() {
     showLoading("#main-content");
@@ -151,7 +146,7 @@ $(function () { // Same as document.addEventListener("DOMContentLoaded"...
 
       var rating = Math.floor(Math.random() * 5) + 1;
 
-      aboutHtmlContent = insertProperty(aboutHtmlContent, "rating", plurilize(rating, "star"));
+      aboutHtmlContent = insertProperty(aboutHtmlContent, "rating", rating + "-star rating");
 
       for (var i = 0; i < 5; i++) {
         var className = "star" + (i + 1);
