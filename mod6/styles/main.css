@@ -1,0 +1,15 @@
+
+.message {
+    font-size: 1.3em;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.border-green {
+    border: solid 1px green;
+
+}
+
+.border-red {
+    border: solid 1px red;
+}
