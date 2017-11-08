@@ -1,107 +1,70 @@
 (function () {
-    'use strict';
+  'use strict';
 
-    angular.module('NarrowItDownApp', [])
-        .service('MenuSearchService', MenuSearchService)
-        .controller('NarrowItDownController', NarrowItDownController)
-        .directive('foundItems', FoundItems)
-        .constant('ApiBasePath', "https://davids-restaurant.herokuapp.com");
+  angular.module('NarrowItDownApp', [])
+  .service('MenuSearchService', MenuSearchService)
+  .controller('NarrowItDownController', NarrowItDownController)
+  .directive('foundItems', FoundItems)
+  .constant('ApiBasePath', "https://davids-restaurant.herokuapp.com");
 
+  // custom directive to show items
+  function FoundItems() {
+    var ddo = {
+      restrict: 'E',
+      scope: {
+        foundItems: '<',
+        onRemove: '&'
+      },
+      templateUrl: 'loader/itemsfound.template.html'
+    };
 
+    return ddo;
+  }
 
-    // 6. Declare and create `foundItems` directive. The list should be displayed using this `directive` which
-    // takes the `found` array of items specified on it as an attribute (think one-way binding with '<'). To
-    // implement the functionality of the "Don't want this one!" button, the directive should also provide an
-    // on-remove attribute that will use function reference binding to invoke the parent controller removal
-    // an item from the `found` array based on an index into the `found` array.
-    function FoundItems() {
-        var ddo = {
-            restrict: 'E',
-            scope: {
-                foundItems: '<',
-                onRemove: '&'
-            },
-            controller: FoundItemsDirectiveController,
-            controllerAs: 'menu',
-            bindToController: true,
-            templateUrl: 'loader/itemsfound.template.html'
-            //template: '{{ item.short_name }} of {{ item.name }}'
-        };
+  MenuSearchService.$inject = ['$http', '$filter', 'ApiBasePath'];
 
-        return ddo;
-    }
+  function MenuSearchService($http, $filter, ApiBasePath) {
+    var service = this;
 
+    service.foundItems = [];
 
-    function FoundItemsDirectiveController() {
-        var menu = this;
+    // get all items that contain the search term
+    service.getMatchedMenuItems = function (searchTerm) {
+      return $http({method: "GET", url: ApiBasePath + '/menu_items.json'}).then(function(response) {
+        service.foundItems = $filter('filter')(response.data.menu_items, searchTerm);
+        return service.foundItems;
+      });
+    };
 
-        menu.cookiesInList = function () {
-            for (var i = 0; i < list.items.length; i++) {
-                var name = list.items[i].name;
-                if (name.toLowerCase().indexOf("cookie") !== -1) {
-                    return true;
-                }
-            }
+    // remove item from menu list
+    service.removeItem = function (itemIndex) {
+      service.foundItems.splice(itemIndex, 1);
+    };
+  }
 
-            return false;
-        };
-    }
+  NarrowItDownController.$inject = ['MenuSearchService'];
 
-    MenuSearchService.$inject = ['$http', 'ApiBasePath'];
+  function NarrowItDownController(MenuSearchService) {
+    var menu = this;
 
-    function MenuSearchService($http, ApiBasePath) {
-        var service = this;
+    // init variables to be used
+    menu.foundItems = [];
+    menu.searchTerm = '';
 
-        var foundItems = [];
+    // get list of items containing user's search term
+    menu.narrowItDown = function () {
+      var promise = MenuSearchService.getMatchedMenuItems(menu.searchTerm);
 
-        // https://davids-restaurant.herokuapp.com/menu_items.json
-        service.getMatchedMenuItems = function (searchTerm) {
-            // var response = $http({method: "GET", url: ("loader/data.json")}).then(function (result) {
-            //     console.log(result);
-            // });
+      promise.then(function (response) {
+        menu.foundItems = response;
+      }).catch(function (error) {
+        console.log(error);
+      });
+    };
 
-            // return processed items
-            //return response;
-            return $http({method: "GET", url: ("loader/data.json")});
-        };
-
-        service.removeItem = function (itemIndex) {
-            console.log("'this' is: ", this);
-            items.splice(itemIndex, 1);
-        };
-
-        //    The index should be passed in from the directive to the controller. (Note that we implemented almost
-        // identical type of behavior in the Lecture 30 Part 2, so as long as you understood that code, it should
-        // be very close to copy/paste). In the NarrowItDownController, simply remove that item from the `found`
-        // array. You can do that using the [Array's splice() method](
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice).
-        // For example, to remove
-        //    an item with the index of 3 from the `found` array, you would call `found.splice(3, 1);`.
-        //
-    }
-
-    NarrowItDownController.$inject = ['$scope', 'MenuSearchService'];
-
-    function NarrowItDownController($scope, MenuSearchService) {
-        var menu = this;
-        $scope.foundItems = [];
-
-        menu.removeItem = function (itemIndex) {
-            console.log("'this' is: ", this);
-            this.lastRemoved = "Last item removed was " + this.items[itemIndex].name;
-            shoppingList.removeItem(itemIndex);
-            this.title = origTitle + " (" + list.items.length + " items )";
-        };
-
-        $scope.narrowItDown = function () {
-            var promise = MenuSearchService.getMatchedMenuItems($scope.searchTerm);
-
-            promise.then(function (response) {
-                $scope.foundItems = response.data.data;
-                console.log($scope.foundItems);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        };
-    }
+    // remove item from menu list
+    menu.removeItem = function (itemIndex) {
+      MenuSearchService.removeItem(itemIndex);
+    };
+  }
 })();
