@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/restaurant.css">
     <link rel="stylesheet" href="css/common.css">
 </head>
-<body ng-app="restaurant" ng-strict-di>
+<body ng-app="menuapp" ng-strict-di>
 
 <!-- Fixed position loading indicator -->
 <loading class="loading-indicator"></loading>
@@ -93,7 +93,7 @@
             </section>
         </div>
         <div class="text-center">
-            &copy; Copyright David Chu's China Bistro 2016 |
+            &copy; Copyright David Chu's China Bistro 2016
         </div>
     </div>
 </footer>
@@ -105,13 +105,13 @@
 <script src="lib/angular-ui-router.min.js"></script>
 
 <!-- Main Restaurant Module -->
-<script src="src/restaurant.module.js"></script>
+<script src="src/menuapp.module.js"></script>
 
 <!-- Common Module -->
 <script src="src/common/common.module.js"></script>
 <script src="src/common/loading/loading.component.js"></script>
 <script src="src/common/loading/loading.interceptor.js"></script>
-<script src="src/common/menu.service.js"></script>
+<script src="src/common/menudata.service.js"></script>
 
 <!-- Public Module -->
 <script src="src/public/public.module.js"></script>

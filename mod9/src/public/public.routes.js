@@ -29,8 +29,8 @@
       controller: 'CategoriesController',
       controllerAs: 'categoriesCtrl',
       resolve: {
-        menuCategories: ['MenuService', function (MenuService) {
-          return MenuService.getCategories();
+        menuCategories: ['MenuDataService', function (MenuService) {
+          return MenuService.getAllCategories();
         }]
       }
     })
@@ -41,8 +41,8 @@
       controller: 'ItemsController',
       controllerAs: 'itemsCtrl',
       resolve: {
-        menuItems: ['$stateParams', 'MenuService', function ($stateParams, MenuService) {
-          return MenuService.getMenuItems($stateParams.category);
+        menuItems: ['$stateParams', 'MenuDataService', function ($stateParams, MenuService) {
+          return MenuService.getItemsForCategory($stateParams.category);
         }]
       }
     })
