@@ -4,7 +4,6 @@
 angular.module('common')
 .service('MenuService', MenuService);
 
-
 MenuService.$inject = ['$http', 'ApiPath'];
 function MenuService($http, ApiPath) {
   var service = this;
@@ -15,6 +14,11 @@ function MenuService($http, ApiPath) {
     });
   };
 
+  service.getCategory = function (shortName) {
+    return $http.get(ApiPath + '/categories/' + shortName + '.json').then(function (response) {
+      return response.data;
+    });
+  };
 
   service.getMenuItems = function (category) {
     var config = {};
@@ -26,9 +30,5 @@ function MenuService($http, ApiPath) {
       return response.data;
     });
   };
-
 }
-
-
-
 })();

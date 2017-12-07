@@ -25,17 +25,19 @@
                 </div>
                 <div class="form-group">
                     <label>Favorite Menu Item Number</label>
-                    <input class="form-control" type="number" placeholder="SP"
+                    <input class="form-control" type="text" maxlength="2" minlength="2"
+                           ng-change="signupCtrl.validateMenuItem()" placeholder="SP"
                            ng-model="signupCtrl.favorite" autofocus>
+                    <div class="help-block" ng-if="signupCtrl.favoriteError">No such menu number exists!</div>
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-primary" ng-click="signupCtrl.login()" ng-disabled="!signupCtrl.valid()">
-                        Login
+                    <button class="btn btn-primary" ng-click="signupCtrl.save()" ng-disabled="!signupCtrl.valid()">
+                        Save
                     </button>
                 </div>
-            </div>
-            <div ng-if="loginCtrl.error" class="login-error text-center">
-                {{signupCtrl.error}}
+                <div ng-if="signupCtrl.displayMessage">
+                    Thank you! Your information has been saved.
+                </div>
             </div>
         </div>
     </div>

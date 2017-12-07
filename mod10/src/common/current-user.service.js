@@ -7,47 +7,46 @@
   /**
    * Used to store and track information about the currently logged in user.
    * This is intended to be injected any time we need some user metadata
-   * or to find out if the user is authenticated.
    **/
   function CurrentUserService() {
     var service = this;
-    var _username = '';
-    var _accessToken = '';
+
     var _user = {
       firstname: '',
       lastname: '',
       email: '',
       phone: '',
-      favorite: ''
+      favorite: '',
+      valid: false
     };
 
     /**
-     * Load the current user with username and token
+     * Save the current user with user information
      */
-    service.saveToken = function (username, user, token) {
-      _username = username;
-      _user = user;
-      _accessToken = token;
+    service.saveUserInfo = function (firstName, lastName, email, phone, favorite) {
+      _user.firstname = firstName;
+      _user.lastname = lastName;
+      _user.email = email;
+      _user.phone = phone;
+      _user.favorite = favorite;
+      _user.valid = true;
+
+      sessionStorage.userInfo = JSON.stringify(_user);
     };
 
 
-    service.getUsername = function () {
-      return _username;
-    };
+    /**
+     * Load the current user with user information
+     */
+    service.getUserInfo = function () {
+      // var rtn = JSON.parse($localStorage.getItem("userInfo"));
+      var rtn = sessionStorage.userInfo;
 
+      if (rtn != undefined && rtn != 'undefined') {
+        _user = JSON.parse(rtn);
+      }
 
-    service.getUser = function () {
       return _user;
-    };
-
-
-    service.getAccessToken = function () {
-      return _accessToken;
-    };
-
-
-    service.isAuthenticated = function () {
-      return _accessToken !== '';
     };
   }
 })();
