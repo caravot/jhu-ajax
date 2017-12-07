@@ -12,10 +12,10 @@
   function SignupController($state, MenuService, CurrentUserService) {
     var $ctrl = this;
 
-    $ctrl.firstname = 'Carrie';
-    $ctrl.lastname = 'Ravotta';
-    $ctrl.email = 'carrie@gmail.com';
-    $ctrl.phone = '111-222-3333';
+    $ctrl.firstname = '';
+    $ctrl.lastname = '';
+    $ctrl.email = '';
+    $ctrl.phone = '';
     $ctrl.favorite = '';
 
     /**
